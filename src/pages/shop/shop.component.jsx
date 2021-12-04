@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 
 // Custom components
-import CollectionPreview from "../../components/preview-collection/collection-preview.component";
+import CollectionPreview from "../../components/collection-preview/collection-preview.component";
 
 // Data
 import SHOP_DATA from "./shopData";
