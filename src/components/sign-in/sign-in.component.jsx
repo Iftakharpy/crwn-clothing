@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import FormInput from "../form-input/form-input.component";
+import CustomButton from "../custom-button/custom-button.component";
 
 import "./sign-in.sytles.scss";
 
@@ -27,7 +28,7 @@ export default class SignIn extends Component {
     return (
       <div className="sign-in">
         <h1>Already have an account?</h1>
-        <span>Sign in with your email and password</span>
+        <span className="title">Sign in with your email and password</span>
         <form action="" onSubmit={this.handleFormSubmit}>
           <FormInput
             handleChange={this.handleChange}
@@ -45,7 +46,7 @@ export default class SignIn extends Component {
             value={password}
             required
           />
-          <input type="submit" value="Sign In" />
+          <CustomButton type="submit">Sign In</CustomButton>
         </form>
       </div>
     );
