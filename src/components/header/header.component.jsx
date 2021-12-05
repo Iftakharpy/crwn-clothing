@@ -1,23 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 
 import "./header.styles.scss";
 
-function Header({ base = "" }) {
+function Header({ routes, base = "" }) {
   return (
     <header className="header">
-      <Link className="logo-container" to={`${base}/`}>
+      <NavLink className="logo-container" to={`${base}/`}>
         <Logo></Logo>
-      </Link>
+      </NavLink>
       <div className="options">
-        <Link className="option" to={`${base}/`}>
-          Home
-        </Link>
-        <Link className="option" to={`${base}/shop`}>
-          Shop
-        </Link>
+        {routes.map((route) => (
+          <NavLink
+            key={route.path}
+            style={({ isActive }) =>
+              isActive ? { backgroundColor: "pink" } : {}
+            }
+            className="option"
+            to={route.path}
+          >
+            {route.name}
+          </NavLink>
+        ))}
       </div>
     </header>
   );
