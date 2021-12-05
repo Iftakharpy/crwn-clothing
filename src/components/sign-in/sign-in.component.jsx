@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import FormInput from "../form-input/form-input.component";
+
 import "./sign-in.sytles.scss";
 
 export default class SignIn extends Component {
@@ -13,7 +15,6 @@ export default class SignIn extends Component {
 
   handleFormSubmit = (event) => {
     event.preventDefault();
-    console.log(event);
     this.setState({ email: "", password: "" });
   };
   handleChange = (event) => {
@@ -28,21 +29,21 @@ export default class SignIn extends Component {
         <h1>Already have an account?</h1>
         <span>Sign in with your email and password</span>
         <form action="" onSubmit={this.handleFormSubmit}>
-          <label htmlFor="email">Email</label>
-          <input
+          <FormInput
+            handleChange={this.handleChange}
+            label="Email"
             type="email"
             name="email"
-            required
             value={email}
-            onChange={this.handleChange}
+            required
           />
-          <label htmlFor="password">Password</label>
-          <input
+          <FormInput
+            handleChange={this.handleChange}
+            label="Password"
             type="password"
             name="password"
-            required
             value={password}
-            onChange={this.handleChange}
+            required
           />
           <input type="submit" value="Sign In" />
         </form>
