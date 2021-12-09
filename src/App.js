@@ -11,9 +11,9 @@ import SingInAndSignUp from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.com
 // Styles
 import "./App.css";
 
-const BASE = "crwn-clothing";
+export const BASE = "crwn-clothing";
 const defaultPageTitle = "Crwn Clothing";
-const ROUTES = [
+const PAGE_ROUTES = [
   {
     path: `${BASE}/`,
     name: "Home",
@@ -33,12 +33,23 @@ const ROUTES = [
   },
 ];
 
+const HEADER_ROUTES = [
+  {
+    path: `${BASE}/`,
+    name: "Home",
+  },
+  {
+    path: `${BASE}/shop`,
+    name: "Shop",
+  },
+];
+
 function App() {
   return (
     <Router>
-      <Header base={BASE} routes={ROUTES} />
+      <Header base={BASE} routes={HEADER_ROUTES} />
       <Routes>
-        {ROUTES.map(({ path, element, name }) => (
+        {PAGE_ROUTES.map(({ path, element, name }) => (
           <Route key={path} path={path} element={element} />
         ))}
       </Routes>
