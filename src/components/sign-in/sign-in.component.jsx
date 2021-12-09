@@ -76,14 +76,17 @@ export default class SignIn extends Component {
             value={password}
             required
           />
-          <CustomButton type="submit">Sign In</CustomButton>
-          <CustomButton
-            onClick={() => {
-              signInWithPopup(auth, googleAuthProvider);
-            }}
-          >
-            Google Sign In
-          </CustomButton>
+          <div className="buttons">
+            <CustomButton type="submit">Sign In</CustomButton>
+            <CustomButton
+              onClick={() => {
+                signInWithPopup(auth, googleAuthProvider);
+              }}
+              isGoogleSignIn
+            >
+              Google Sign In
+            </CustomButton>
+          </div>
         </form>
       </div>
     );
