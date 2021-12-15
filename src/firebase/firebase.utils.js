@@ -38,9 +38,9 @@ export const createUserProfileDocument = async (userAuth, otherData) => {
   if (!userAuth) return;
 
   const userRef = doc(db, `/users/${userAuth.uid}`);
-  const snapshot = getDoc(userRef);
+  const snapshot = await getDoc(userRef);
 
-  if (!snapshot.exists) {
+  if (!snapshot.exists()) {
     const { displayName, email } = userAuth;
     const createdAt = serverTimestamp();
 
