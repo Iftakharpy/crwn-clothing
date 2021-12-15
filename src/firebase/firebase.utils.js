@@ -1,7 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { doc, getFirestore, getDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getFirestore,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -36,7 +42,7 @@ export const createUserProfileDocument = async (userAuth, otherData) => {
 
   if (!snapshot.exists) {
     const { displayName, email } = userAuth;
-    const createdAt = new Date();
+    const createdAt = serverTimestamp();
 
     try {
       await setDoc(userRef, { displayName, email, createdAt, ...otherData });
