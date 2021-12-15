@@ -12,9 +12,16 @@ export default class SingInAndSignUp extends Component {
   };
 
   render() {
+    const { currentUser } = this.props;
+    if (currentUser)
+      return (
+        <span>
+          <strong>{currentUser.displayName}</strong> you are already signed in.
+        </span>
+      );
     return (
       <div className="sign-in-and-sign-up">
-        <SignIn />
+        <SignIn {...this.props} />
       </div>
     );
   }

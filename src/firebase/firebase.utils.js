@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-// import { getDatabase } from "firebase/database";
+import { doc, getFirestore, getDoc, setDoc } from "firebase/firestore";
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -21,9 +21,29 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-// const db = getDatabase(app);
+const db = getFirestore(app);
 // const analytics = getAnalytics(app);
 
 // Auth
 export const googleAuthProvider = new GoogleAuthProvider();
 googleAuthProvider.setCustomParameters({ prompt: "select_account" });
+
+export const createUserProfileDocument = async (userAuth, otherData) => {
+  if (!userAuth) return;
+
+  const userRef = doc(db, `/users/${userAuth.uid}`);
+  const snapshot = getDoc(userRef);
+
+  if (!snapshot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await setDoc(userRef, { displayName, email, createdAt, ...otherData });
+    } catch (error) {
+      console.error("Error saving user profile", error);
+    }
+  }
+
+  return userRef;
+};

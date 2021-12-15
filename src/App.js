@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { Component } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Custom components
@@ -8,8 +8,13 @@ import HomePage from "./pages/homepage/homepage.component";
 import Shop from "./pages/shop/shop.component";
 import SingInAndSignUp from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 
+// auth
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import { onAuthStateChanged } from "firebase/auth";
+
 // Styles
 import "./App.css";
+import { onSnapshot } from "firebase/firestore";
 
 export const BASE = "crwn-clothing";
 const defaultPageTitle = "Crwn Clothing";
@@ -17,19 +22,24 @@ const PAGE_ROUTES = [
   {
     path: `${BASE}/`,
     name: "Home",
-    element: <HomePage defaultPageTitle={defaultPageTitle} />,
+    ComponentToRender: HomePage,
+    props: {},
   },
   {
     path: `${BASE}/shop`,
     name: "Shop",
-    element: <Shop pageTitle="Shop" defaultPageTitle={defaultPageTitle} />,
+    ComponentToRender: Shop,
+    props: {
+      pageTitle: "Shop",
+    },
   },
   {
     path: `${BASE}/signin`,
     name: "Signin",
-    element: (
-      <SingInAndSignUp pageTitle="Signin" defaultPageTitle={defaultPageTitle} />
-    ),
+    ComponentToRender: SingInAndSignUp,
+    props: {
+      pageTitle: "SignIn",
+    },
   },
 ];
 
@@ -44,17 +54,59 @@ const HEADER_ROUTES = [
   },
 ];
 
-function App() {
-  return (
-    <Router>
-      <Header base={BASE} routes={HEADER_ROUTES} />
-      <Routes>
-        {PAGE_ROUTES.map(({ path, element, name }) => (
-          <Route key={path} path={path} element={element} />
-        ))}
-      </Routes>
-    </Router>
-  );
+export class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      currentUser: null,
+    };
+  }
+
+  componentDidMount = () => {
+    this.unsubscribeFromAuthStateChangeEvent = onAuthStateChanged(
+      auth,
+      async (user) => {
+        if (user !== null) {
+          const userRef = await createUserProfileDocument(user);
+          onSnapshot(userRef, (snapshot) => {
+            const currentUser = { ...snapshot.data(), id: snapshot.id };
+            this.setState({ currentUser });
+          });
+        } else {
+          this.setState({ currentUser: null });
+        }
+      }
+    );
+  };
+  componentWillUnmount = () => {
+    this.unsubscribeFromAuthStateChangeEvent();
+  };
+
+  render() {
+    const { currentUser } = this.state;
+    return (
+      <Router>
+        <Header base={BASE} routes={HEADER_ROUTES} currentUser={currentUser} />
+        <Routes>
+          {PAGE_ROUTES.map(({ path, name, ComponentToRender, props }) => {
+            props = { ...props, currentUser };
+            return (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <ComponentToRender
+                    defaultPageTitle={defaultPageTitle}
+                    {...props}
+                  ></ComponentToRender>
+                }
+              />
+            );
+          })}
+        </Routes>
+      </Router>
+    );
+  }
 }
 
 export default App;

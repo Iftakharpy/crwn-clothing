@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { signOut, onAuthStateChanged } from "firebase/auth";
+import { signOut } from "firebase/auth";
 
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { BASE } from "../../App";
@@ -12,26 +12,15 @@ export class Header extends Component {
   constructor() {
     super();
 
-    this.state = {
-      currentUser: null,
-    };
     this.signInRoute = {
       path: `${BASE}/signin`,
       name: "Signin",
     };
   }
 
-  componentDidMount = () => {
-    this.unsubscribeLoginEvent = onAuthStateChanged(auth, (user) => {
-      this.setState({ currentUser: user });
-    });
-  };
-
-  componentWillUnmount = () => this.unsubscribeLoginEvent();
-
   render() {
     const { routes, base = "" } = this.props;
-    const { currentUser } = this.state;
+    const { currentUser } = this.props;
     return (
       <header className="header">
         <NavLink className="logo-container" to={`${base}/`}>
