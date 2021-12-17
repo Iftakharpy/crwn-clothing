@@ -2,6 +2,9 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// Redux
+import { Provider } from "react-redux";
+
 // Custom components
 import Header from "./components/header/header.component";
 import HomePage from "./pages/homepage/homepage.component";
@@ -85,26 +88,32 @@ export class App extends Component {
   render() {
     const { currentUser } = this.state;
     return (
-      <Router>
-        <Header base={BASE} routes={HEADER_ROUTES} currentUser={currentUser} />
-        <Routes>
-          {PAGE_ROUTES.map(({ path, name, ComponentToRender, props }) => {
-            props = { ...props, currentUser };
-            return (
-              <Route
-                key={path}
-                path={path}
-                element={
-                  <ComponentToRender
-                    defaultPageTitle={defaultPageTitle}
-                    {...props}
-                  ></ComponentToRender>
-                }
-              />
-            );
-          })}
-        </Routes>
-      </Router>
+      <Provider>
+        <Router>
+          <Header
+            base={BASE}
+            routes={HEADER_ROUTES}
+            currentUser={currentUser}
+          />
+          <Routes>
+            {PAGE_ROUTES.map(({ path, name, ComponentToRender, props }) => {
+              props = { ...props, currentUser };
+              return (
+                <Route
+                  key={path}
+                  path={path}
+                  element={
+                    <ComponentToRender
+                      defaultPageTitle={defaultPageTitle}
+                      {...props}
+                    ></ComponentToRender>
+                  }
+                />
+              );
+            })}
+          </Routes>
+        </Router>
+      </Provider>
     );
   }
 }
