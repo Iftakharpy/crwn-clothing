@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
+import { connect } from "react-redux";
+
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { BASE } from "../../App";
 import { auth } from "../../firebase/firebase.utils";
@@ -62,4 +64,8 @@ export class Header extends Component {
   }
 }
 
-export default Header;
+const mapStateTopProps = (state) => ({
+  currentUser: state.user.currentUser,
+});
+
+export default connect(mapStateTopProps)(Header);

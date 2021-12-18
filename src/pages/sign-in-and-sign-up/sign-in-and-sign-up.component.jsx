@@ -1,10 +1,16 @@
 import React, { Component } from "react";
+import { Navigate } from "react-router-dom";
+
+import { connect } from "react-redux";
+
 import SignIn from "../../components/sign-in/sign-in.component";
 import SignUp from "../../components/sign-up/sign-up.component";
 
+import { BASE } from "../../App";
+
 import "./sign-in-and-sign-up.styles.scss";
 
-export default class SingInAndSignUp extends Component {
+class SingInAndSignUp extends Component {
   componentDidMount = () => {
     const { pageTitle = null } = this.props;
     if (pageTitle !== null) document.title = pageTitle;
@@ -16,12 +22,7 @@ export default class SingInAndSignUp extends Component {
 
   render() {
     const { currentUser } = this.props;
-    if (currentUser)
-      return (
-        <span>
-          <strong>{currentUser.displayName}</strong> you are already signed in.
-        </span>
-      );
+    if (currentUser) return <Navigate to={`/${BASE}/`} />;
     return (
       <div className="sign-in-and-sign-up">
         <SignIn {...this.props} />
@@ -30,3 +31,7 @@ export default class SingInAndSignUp extends Component {
     );
   }
 }
+
+const mapStateTopProps = (state) => ({ currentUser: state.user.currentUser });
+
+export default connect(mapStateTopProps)(SingInAndSignUp);
