@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Redux
 import { Provider } from "react-redux";
+import store from "./redux/store";
 
 // Custom components
 import Header from "./components/header/header.component";
@@ -88,7 +89,7 @@ export class App extends Component {
   render() {
     const { currentUser } = this.state;
     return (
-      <Provider>
+      <Provider store={store}>
         <Router>
           <Header
             base={BASE}
