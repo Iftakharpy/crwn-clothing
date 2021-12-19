@@ -1,6 +1,8 @@
 // react
 import React from "react";
 
+import CustomButton from "../custom-button/custom-button.component";
+
 // style
 import "./collection-item.style.scss";
 
@@ -17,6 +19,7 @@ export default function CollectionItem({ id, name, price, imageUrl }) {
         <span className="name">{name}</span>
         <span className="price">${price}</span>
       </div>
+      <CustomButton inverted>Add to cart</CustomButton>
     </div>
   );
 }
