@@ -9,7 +9,11 @@ import "./cart-icon.styles.scss";
 
 const ShoppingCart = () => {
   const dispatch = useDispatch();
-  const itemsCount = useSelector((state) => state.cart.items.length);
+  const itemsCount = useSelector((state) => {
+    let count = 0;
+    state.cart.items.forEach((element) => (count += element.quantity));
+    return count;
+  });
   return (
     <div
       className="cart-icon"
