@@ -3,10 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    items: [
-      { product: { id: "kkk", name: "shirt", price: 99 }, quantity: 10 },
-      { product: { id: "kkk", name: "shirt", price: 99 }, quantity: 10 },
-    ],
+    items: [],
     hidden: true,
   },
   reducers: {
@@ -18,19 +15,19 @@ const cartSlice = createSlice({
     },
     removeItem: (state, action) => {
       let items = state.items.filter(
-        (product) => product.id !== action.payload
+        (product) => product.id !== action.payload.id
       );
       state.items = items;
     },
     increaseCount: (state, action) => {
       let item = state.items.find(
-        ({ product }) => product.id === action.payload
+        ({ product }) => product.id === action.payload.id
       );
       item.quantity += 1;
     },
     decreaseCount: (state, action) => {
       let item = state.items.find(
-        ({ product }) => product.id === action.payload
+        ({ product }) => product.id === action.payload.id
       );
       item.quantity -= 1;
     },
