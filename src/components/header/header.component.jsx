@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
+
 import { NavLink } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { BASE } from "../../App";
@@ -10,62 +11,54 @@ import { auth } from "../../firebase/firebase.utils";
 
 import "./header.styles.scss";
 
-export class Header extends Component {
-  constructor() {
-    super();
+const Header = (props) => {
+  const signInRoute = {
+    path: `${BASE}/signin`,
+    name: "Signin",
+  };
+  const { routes, base = "" } = props;
+  const currentUser = useSelector((state) => {
+    return state.user;
+  });
 
-    this.signInRoute = {
-      path: `${BASE}/signin`,
-      name: "Signin",
-    };
-  }
+  return (
+    <header className="header">
+      <NavLink className="logo-container" to={`${base}/`}>
+        <Logo></Logo>
+      </NavLink>
+      <div className="options">
+        {routes.map((route) => (
+          <NavLink
+            key={route.path}
+            style={({ isActive }) =>
+              isActive ? { backgroundColor: "pink" } : {}
+            }
+            className="option"
+            to={route.path}
+          >
+            {route.name}
+          </NavLink>
+        ))}
 
-  render() {
-    const { routes, base = "" } = this.props;
-    const { currentUser } = this.props;
-    return (
-      <header className="header">
-        <NavLink className="logo-container" to={`${base}/`}>
-          <Logo></Logo>
-        </NavLink>
-        <div className="options">
-          {routes.map((route) => (
-            <NavLink
-              key={route.path}
-              style={({ isActive }) =>
-                isActive ? { backgroundColor: "pink" } : {}
-              }
-              className="option"
-              to={route.path}
-            >
-              {route.name}
-            </NavLink>
-          ))}
+        {currentUser ? (
+          <div className="option" onClick={() => signOut(auth)}>
+            SignOut
+          </div>
+        ) : (
+          <NavLink
+            key={signInRoute.path}
+            style={({ isActive }) =>
+              isActive ? { backgroundColor: "pink" } : {}
+            }
+            className="option"
+            to={signInRoute.path}
+          >
+            {signInRoute.name}
+          </NavLink>
+        )}
+      </div>
+    </header>
+  );
+};
 
-          {currentUser ? (
-            <div className="option" onClick={() => signOut(auth)}>
-              SignOut
-            </div>
-          ) : (
-            <NavLink
-              key={this.signInRoute.path}
-              style={({ isActive }) =>
-                isActive ? { backgroundColor: "pink" } : {}
-              }
-              className="option"
-              to={this.signInRoute.path}
-            >
-              {this.signInRoute.name}
-            </NavLink>
-          )}
-        </div>
-      </header>
-    );
-  }
-}
-
-const mapStateTopProps = (state) => ({
-  currentUser: state.user.currentUser,
-});
-
-export default connect(mapStateTopProps)(Header);
+export default Header;

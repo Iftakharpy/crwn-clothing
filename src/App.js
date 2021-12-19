@@ -1,10 +1,10 @@
 // React
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Redux
-import { connect } from "react-redux";
-import { setCurrentUser } from "./redux/user/user.actions";
+import { useDispatch } from "react-redux";
+import { setUser } from "./redux/features/user/userSlice";
 
 // Custom components
 import Header from "./components/header/header.component";
@@ -58,55 +58,56 @@ const HEADER_ROUTES = [
   },
 ];
 
-class App extends Component {
-  componentDidMount = () => {
-    const { setCurrentUser } = this.props;
-    this.unsubscribeFromAuthStateChangeEvent = onAuthStateChanged(
+const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // component did mount
+    const unsubscribeFromAuthStateChangeEvent = onAuthStateChanged(
       auth,
       async (user) => {
         if (user !== null) {
           const userRef = await createUserProfileDocument(user);
           onSnapshot(userRef, (snapshot) => {
             const currentUser = { ...snapshot.data(), id: snapshot.id };
-            setCurrentUser(currentUser);
+            const user = {
+              displayName: currentUser.displayName,
+              email: currentUser.email,
+              id: currentUser.id,
+            };
+            dispatch(setUser(user));
           });
         } else {
-          setCurrentUser(null);
+          dispatch(setUser(null));
         }
       }
     );
-  };
-  componentWillUnmount = () => {
-    this.unsubscribeFromAuthStateChangeEvent();
-  };
+    return () => {
+      // component will unmount
+      unsubscribeFromAuthStateChangeEvent();
+    };
+  });
 
-  render() {
-    return (
-      <Router>
-        <Header base={BASE} routes={HEADER_ROUTES} />
-        <Routes>
-          {PAGE_ROUTES.map(({ path, name, ComponentToRender, props }) => {
-            return (
-              <Route
-                key={path}
-                path={path}
-                element={
-                  <ComponentToRender
-                    defaultPageTitle={defaultPageTitle}
-                    {...props}
-                  ></ComponentToRender>
-                }
-              />
-            );
-          })}
-        </Routes>
-      </Router>
-    );
-  }
-}
+  return (
+    <Router>
+      <Header base={BASE} routes={HEADER_ROUTES} />
+      <Routes>
+        {PAGE_ROUTES.map(({ path, name, ComponentToRender, props }) => {
+          return (
+            <Route
+              key={path}
+              path={path}
+              element={
+                <ComponentToRender
+                  defaultPageTitle={defaultPageTitle}
+                  {...props}
+                ></ComponentToRender>
+              }
+            />
+          );
+        })}
+      </Routes>
+    </Router>
+  );
+};
 
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default connect(null, mapDispatchToProps)(App);
+export default App;
