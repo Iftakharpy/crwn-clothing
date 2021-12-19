@@ -1,10 +1,9 @@
 import React from "react";
-
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
-import { useSelector } from "react-redux";
-
+import ShoppingCart from "../cart-icon/cart-icon.component";
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { BASE } from "../../App";
 import { auth } from "../../firebase/firebase.utils";
@@ -41,9 +40,12 @@ const Header = (props) => {
         ))}
 
         {currentUser ? (
-          <div className="option" onClick={() => signOut(auth)}>
-            SignOut
-          </div>
+          <>
+            <div className="option" onClick={() => signOut(auth)}>
+              SignOut
+            </div>
+            <ShoppingCart />
+          </>
         ) : (
           <NavLink
             key={signInRoute.path}
