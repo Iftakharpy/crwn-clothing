@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 
 import userReducer from "./features/user/userSlice";
@@ -8,9 +8,8 @@ const reducers = {
   user: userReducer,
   cart: cartReducer,
 };
-const middlwares = [...getDefaultMiddleware(), logger];
 
 export default configureStore({
   reducer: reducers,
-  middleware: middlwares,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([logger]),
 });
