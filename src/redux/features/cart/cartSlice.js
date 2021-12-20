@@ -15,7 +15,7 @@ const cartSlice = createSlice({
     },
     removeItem: (state, action) => {
       let items = state.items.filter(
-        (product) => product.id !== action.payload.id
+        ({ product }) => product.id !== action.payload.id
       );
       state.items = items;
     },

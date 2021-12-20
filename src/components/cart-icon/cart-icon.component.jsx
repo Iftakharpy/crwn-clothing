@@ -12,7 +12,6 @@ import "./cart-icon.styles.scss";
 const ShoppingCart = () => {
   const dispatch = useDispatch();
   const hidden = useSelector((state) => state.cart.hidden);
-  console.log(hidden);
   const itemsCount = useSelector((state) => {
     let count = 0;
     state.cart.items.forEach((element) => (count += element.quantity));
