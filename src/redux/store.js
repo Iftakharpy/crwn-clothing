@@ -23,10 +23,12 @@ import logger from "redux-logger";
 
 import userReducer from "./features/user/userSlice";
 import cartReducer from "./features/cart/cartSlice";
+import directoryReducer from "./features/directory/directorySlice";
 
 const reducers = combineReducers({
   user: userReducer,
   cart: cartReducer,
+  directory: directoryReducer,
 });
 
 const persistConfig = {
