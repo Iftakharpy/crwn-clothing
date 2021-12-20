@@ -69,12 +69,12 @@ const App = () => {
           const userRef = await createUserProfileDocument(user);
           onSnapshot(userRef, (snapshot) => {
             const currentUser = { ...snapshot.data(), id: snapshot.id };
-            const user = {
-              displayName: currentUser.displayName,
-              email: currentUser.email,
-              id: currentUser.id,
-            };
-            dispatch(setUser(user));
+            dispatch(
+              setUser({
+                ...currentUser,
+                createdAt: currentUser.createdAt.toMillis(),
+              })
+            );
           });
         } else {
           dispatch(setUser(null));
