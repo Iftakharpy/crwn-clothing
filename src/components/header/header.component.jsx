@@ -5,7 +5,6 @@ import { signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
 
 import ShoppingCart from "../cart-icon/cart-icon.component";
-import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { BASE } from "../../App";
 import { auth } from "../../firebase/firebase.utils";
@@ -19,8 +18,6 @@ const Header = (props) => {
   };
   const { routes, base = "" } = props;
   const { currentUser } = useSelector((state) => state.user);
-
-  const hidden = useSelector((state) => state.cart.hidden);
 
   return (
     <header className="header">
@@ -58,10 +55,7 @@ const Header = (props) => {
           </NavLink>
         )}
 
-        <>
-          <ShoppingCart />
-          {hidden ? null : <CartDropdown />}
-        </>
+        <ShoppingCart />
       </div>
     </header>
   );
