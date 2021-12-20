@@ -2,14 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
-import { useSelector, useDispatch } from "react-redux";
-import {
-  toggleItemsVisibility,
-  increaseCount,
-  decreaseCount,
-  addItem,
-  removeItem,
-} from "../../redux/features/cart/cartSlice";
+import { useSelector } from "react-redux";
 
 import ShoppingCart from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
@@ -29,7 +22,6 @@ const Header = (props) => {
     return state.user;
   });
 
-  const dispatch = useDispatch();
   const hidden = useSelector((state) => state.cart.hidden);
 
   return (
@@ -52,12 +44,9 @@ const Header = (props) => {
         ))}
 
         {currentUser ? (
-          <>
-            <div className="option" onClick={() => signOut(auth)}>
-              SignOut
-            </div>
-            <ShoppingCart />
-          </>
+          <div className="option" onClick={() => signOut(auth)}>
+            SignOut
+          </div>
         ) : (
           <NavLink
             key={signInRoute.path}
@@ -70,7 +59,11 @@ const Header = (props) => {
             {signInRoute.name}
           </NavLink>
         )}
-        {hidden ? null : <CartDropdown />}
+
+        <>
+          <ShoppingCart />
+          {hidden ? null : <CartDropdown />}
+        </>
       </div>
     </header>
   );
