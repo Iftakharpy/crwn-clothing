@@ -1,9 +1,8 @@
 // React
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 // Custom components
-import CollectionPreview from "../../components/collection-preview/collection-preview.component";
+import CollectionsOverview from "../../components/collections-overview/collections-overview.component";
 
 const Shop = (props) => {
   const { pageTitle = null, defaultPageTitle = null } = props;
@@ -14,13 +13,9 @@ const Shop = (props) => {
     };
   });
 
-  const { SHOP_DATA } = useSelector((state) => state.shop);
-
   return (
     <main className="shop-page">
-      {SHOP_DATA.map(({ id, ...otherData }) => (
-        <article key={id}>{<CollectionPreview {...otherData} />}</article>
-      ))}
+      <CollectionsOverview />
     </main>
   );
 };
