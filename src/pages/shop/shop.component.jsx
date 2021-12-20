@@ -1,34 +1,28 @@
 // React
-import React, { Component } from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 // Custom components
 import CollectionPreview from "../../components/collection-preview/collection-preview.component";
 
-// Data
-import SHOP_DATA from "./shopData";
-
-export default class Shop extends Component {
-  constructor() {
-    super();
-    this.state = { SHOP_DATA: SHOP_DATA };
-  }
-
-  componentDidMount = () => {
-    const { pageTitle = null } = this.props;
+const Shop = (props) => {
+  const { pageTitle = null, defaultPageTitle = null } = props;
+  useEffect(() => {
     if (pageTitle !== null) document.title = pageTitle;
-  };
-  componentWillUnmount = () => {
-    const { defaultPageTitle = null } = this.props;
-    if (defaultPageTitle !== null) document.title = defaultPageTitle;
-  };
+    return () => {
+      if (defaultPageTitle !== null) document.title = defaultPageTitle;
+    };
+  });
 
-  render() {
-    return (
-      <main className="shop-page">
-        {this.state.SHOP_DATA.map(({ id, ...otherData }) => (
-          <article key={id}>{<CollectionPreview {...otherData} />}</article>
-        ))}
-      </main>
-    );
-  }
-}
+  const { SHOP_DATA } = useSelector((state) => state.shop);
+
+  return (
+    <main className="shop-page">
+      {SHOP_DATA.map(({ id, ...otherData }) => (
+        <article key={id}>{<CollectionPreview {...otherData} />}</article>
+      ))}
+    </main>
+  );
+};
+
+export default Shop;
