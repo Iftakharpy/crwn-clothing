@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
@@ -8,7 +9,10 @@ import CartItem from "../cart-item/cart-item.component";
 
 import "./cart-dropdown.styles.scss";
 
+import { BASE } from "../../App";
+
 const CartDropdown = () => {
+  const navigate = useNavigate();
   let cartItems = useSelector((state) => state.cart.items);
   return (
     <div className="cart-dropdown">
@@ -19,7 +23,9 @@ const CartDropdown = () => {
           <span className="empty-message">Your cart is empty</span>
         )}
       </div>
-      <CustomButton>Go To Checkout</CustomButton>
+      <CustomButton onClick={() => navigate(`/${BASE}/checkout`)}>
+        Go To Checkout
+      </CustomButton>
     </div>
   );
 };
