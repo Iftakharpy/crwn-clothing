@@ -11,7 +11,7 @@ import { BASE } from "../../App";
 import "./sign-in-and-sign-up.styles.scss";
 
 const SingInAndSignUp = (props) => {
-  const { user } = useSelector((state) => state);
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     // When component mounts change page title
@@ -22,11 +22,11 @@ const SingInAndSignUp = (props) => {
     };
   });
 
-  if (user) return <Navigate to={`/${BASE}/`} />;
+  if (currentUser) return <Navigate to={`/${BASE}/`} />;
   return (
     <div className="sign-in-and-sign-up">
-      <SignIn currentUser={user} />
-      <SignUp currentUser={user} />
+      <SignIn />
+      <SignUp />
     </div>
   );
 };

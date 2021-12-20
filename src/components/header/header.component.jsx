@@ -18,9 +18,7 @@ const Header = (props) => {
     name: "Signin",
   };
   const { routes, base = "" } = props;
-  const currentUser = useSelector((state) => {
-    return state.user;
-  });
+  const { currentUser } = useSelector((state) => state.user);
 
   const hidden = useSelector((state) => state.cart.hidden);
 
