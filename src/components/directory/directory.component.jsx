@@ -9,10 +9,8 @@ function Directory() {
   const { sections } = useSelector((state) => state.directory);
   return (
     <div className="directory-menu">
-      {sections.map(({ id, title, imageUrl, size }) => {
-        return (
-          <MenuItem key={id} title={title} imageUrl={imageUrl} size={size} />
-        );
+      {sections.map((section) => {
+        return <MenuItem key={section.id} section={section} />;
       })}
     </div>
   );

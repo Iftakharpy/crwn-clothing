@@ -1,9 +1,19 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import "./menu-item.styles.scss";
 
-function MenuItem({ title, imageUrl, size }) {
+function MenuItem({ section }) {
+  const { title, size, imageUrl, linkUrl } = section;
+  const navigate = useNavigate();
+  const BASE = useSelector((state) => state.defaults.base);
+
   return (
-    <section className={`${size} menu-item`}>
+    <section
+      className={`${size} menu-item`}
+      onClick={() => navigate(`${BASE}${linkUrl}`)}
+    >
       <div
         className="background-image"
         style={{

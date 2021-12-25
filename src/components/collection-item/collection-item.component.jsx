@@ -9,9 +9,9 @@ import CustomButton from "../custom-button/custom-button.component";
 // style
 import "./collection-item.style.scss";
 
-const CollectionItem = (product) => {
+const CollectionItem = ({ item }) => {
   let cartItems = useSelector((state) => state.cart.items);
-  const { name, price, imageUrl } = product;
+  const { name, price, imageUrl } = item;
   const dispatch = useDispatch();
   return (
     <div className="collection-item">
@@ -27,16 +27,14 @@ const CollectionItem = (product) => {
       </div>
       <CustomButton
         onClick={() => {
-          let productInCart = false;
+          let itemInCart = false;
           cartItems.forEach((element) => {
-            if (element.product.id === product.id) {
-              productInCart = true;
+            if (element.product.id === item.id) {
+              itemInCart = true;
               return;
             }
           });
-          productInCart
-            ? dispatch(increaseCount(product))
-            : dispatch(addItem(product));
+          itemInCart ? dispatch(increaseCount(item)) : dispatch(addItem(item));
         }}
         inverted
       >
