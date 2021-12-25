@@ -6,12 +6,11 @@ import { useSelector } from "react-redux";
 import SignIn from "../../components/sign-in/sign-in.component";
 import SignUp from "../../components/sign-up/sign-up.component";
 
-import { BASE } from "../../App";
-
 import "./sign-in-and-sign-up.styles.scss";
 
 const SingInAndSignUp = (props) => {
   const { currentUser } = useSelector((state) => state.user);
+  const BASE = useSelector((state) => state.defaults.base);
 
   useEffect(() => {
     // When component mounts change page title
@@ -22,7 +21,7 @@ const SingInAndSignUp = (props) => {
     };
   });
 
-  if (currentUser) return <Navigate to={`/${BASE}/`} />;
+  if (currentUser) return <Navigate to={`${BASE}`} />;
   return (
     <div className="sign-in-and-sign-up">
       <SignIn />

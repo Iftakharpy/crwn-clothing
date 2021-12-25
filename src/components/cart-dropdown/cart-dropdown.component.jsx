@@ -10,12 +10,12 @@ import CartItem from "../cart-item/cart-item.component";
 
 import "./cart-dropdown.styles.scss";
 
-import { BASE } from "../../App";
-
 const CartDropdown = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let cartItems = useSelector((state) => state.cart.items);
+  let BASE = useSelector((state) => state.defaults.base);
+
   return (
     <div className="cart-dropdown">
       <div className="cart-items">
@@ -28,7 +28,7 @@ const CartDropdown = () => {
       <CustomButton
         onClick={() => {
           dispatch(toggleItemsVisibility());
-          navigate(`/${BASE}/checkout`);
+          navigate(`${BASE}checkout`);
         }}
       >
         Go To Checkout

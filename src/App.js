@@ -1,17 +1,24 @@
 // React
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect, Fragment } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+  useParams,
+} from "react-router-dom";
 
 // Redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./redux/features/user/userSlice";
 
 // Custom components
 import Header from "./components/header/header.component";
 import HomePage from "./pages/homepage/homepage.component";
-import Shop from "./pages/shop/shop.component";
+import ShopPage from "./pages/shop/shop.component";
 import SingInAndSignUp from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import Checkout from "./pages/checkout/checkout.component";
+import NotFound from "./components/NotFound/NotFound.component";
 
 // auth
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
@@ -21,57 +28,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import "./App.css";
 import { onSnapshot } from "firebase/firestore";
 
-export const BASE = "crwn-clothing";
-const defaultPageTitle = "Crwn Clothing";
-const PAGE_ROUTES = [
-  {
-    path: `${BASE}/`,
-    name: "Home",
-    ComponentToRender: HomePage,
-    props: {},
-  },
-  {
-    path: `${BASE}/shop`,
-    name: "Shop",
-    ComponentToRender: Shop,
-    props: {
-      pageTitle: "Shop",
-    },
-  },
-  {
-    path: `${BASE}/checkout`,
-    name: "Checkout",
-    ComponentToRender: Checkout,
-    props: {
-      pageTitle: "Checkout",
-    },
-  },
-  {
-    path: `${BASE}/signin`,
-    name: "Signin",
-    ComponentToRender: SingInAndSignUp,
-    props: {
-      pageTitle: "SignIn",
-    },
-  },
-];
-
-const HEADER_ROUTES = [
-  {
-    path: `${BASE}/`,
-    name: "Home",
-  },
-  {
-    path: `${BASE}/shop`,
-    name: "Shop",
-  },
-  // {
-  //   path: `${BASE}/checkout`,
-  //   name: "Checkout",
-  // },
-];
+function Category() {
+  const { category } = useParams();
+  return <div>{category}</div>;
+}
 
 const App = () => {
+  const BASE = useSelector((state) => state.defaults.base);
+
   const dispatch = useDispatch();
   useEffect(() => {
     // component did mount
@@ -102,22 +66,28 @@ const App = () => {
 
   return (
     <Router>
-      <Header base={BASE} routes={HEADER_ROUTES} />
       <Routes>
-        {PAGE_ROUTES.map(({ path, name, ComponentToRender, props }) => {
-          return (
-            <Route
-              key={path}
-              path={path}
-              element={
-                <ComponentToRender
-                  defaultPageTitle={defaultPageTitle}
-                  {...props}
-                ></ComponentToRender>
-              }
-            />
-          );
-        })}
+        <Route
+          path={BASE}
+          element={
+            <Fragment>
+              <Header />
+              <Outlet />
+            </Fragment>
+          }
+        >
+          <Route index element={<HomePage />} />
+          <Route path="shop" element={<Outlet />}>
+            <Route index element={<ShopPage pageTitle="Shop" />} />
+            <Route path=":category" element={<Category />} />
+          </Route>
+          <Route path="checkout" element={<Checkout pageTitle="Checkout" />} />
+          <Route
+            path="signin"
+            element={<SingInAndSignUp pageTitle="SignIn" />}
+          />
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Routes>
     </Router>
   );
