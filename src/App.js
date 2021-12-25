@@ -5,7 +5,6 @@ import {
   Routes,
   Route,
   Outlet,
-  useParams,
 } from "react-router-dom";
 
 // Redux
@@ -19,6 +18,7 @@ import ShopPage from "./pages/shop/shop.component";
 import SingInAndSignUp from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import Checkout from "./pages/checkout/checkout.component";
 import NotFound from "./components/NotFound/NotFound.component";
+import Collection from "./pages/collection/collection.component";
 
 // auth
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
@@ -27,11 +27,6 @@ import { onAuthStateChanged } from "firebase/auth";
 // Styles
 import "./App.css";
 import { onSnapshot } from "firebase/firestore";
-
-function Category() {
-  const { category } = useParams();
-  return <div>{category}</div>;
-}
 
 const App = () => {
   const BASE = useSelector((state) => state.defaults.base);
@@ -79,7 +74,7 @@ const App = () => {
           <Route index element={<HomePage />} />
           <Route path="shop" element={<Outlet />}>
             <Route index element={<ShopPage pageTitle="Shop" />} />
-            <Route path=":category" element={<Category />} />
+            <Route path=":collectionId" element={<Collection />} />
           </Route>
           <Route path="checkout" element={<Checkout pageTitle="Checkout" />} />
           <Route
