@@ -4,16 +4,18 @@ import { useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 
 import CheckoutItem from "../../components/checkout-item/checkout-item.component";
+import StripeButton from "../../components/stripe-button/stripe-button.component";
 
 import "./checkout.styles.scss";
 
 const Checkout = (props) => {
+  const { defaultPageTitle } = useSelector((state) => state.defaults);
   useEffect(() => {
     // When component mounts change page title
     if (props?.pageTitle) document.title = props?.pageTitle;
     return () => {
       // When component unmounts change page title to default title
-      if (props?.defaultPageTitle) document.title = props?.defaultPageTitle;
+      if (defaultPageTitle) document.title = defaultPageTitle;
     };
   });
   const { items } = useSelector((state) => state.cart);
@@ -49,6 +51,7 @@ const Checkout = (props) => {
       <div className="total">
         <span>Total: ${total}</span>
       </div>
+      <StripeButton price={total} />
     </main>
   );
 };
