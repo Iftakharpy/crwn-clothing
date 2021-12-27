@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import "./homepage.styles.scss";
 
 import Directory from "../../components/directory/directory.component";
+import { HomePageContainer } from "./homepage.styled";
 
 export default class HomePage extends Component {
   componentDidMount = () => {
@@ -15,9 +15,9 @@ export default class HomePage extends Component {
 
   render() {
     return (
-      <div className="homepage">
+      <HomePageContainer>
         <Directory />
-      </div>
+      </HomePageContainer>
     );
   }
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
 import { useSelector } from "react-redux";
@@ -8,7 +7,12 @@ import ShoppingCart from "../cart-icon/cart-icon.component";
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { auth } from "../../firebase/firebase.utils";
 
-import "./header.styles.scss";
+import {
+  HeaderContainer,
+  LogoContainer,
+  OptionsContainer,
+  Option,
+} from "./header.styled";
 
 const Header = () => {
   const BASE = useSelector((state) => state.defaults.base);
@@ -31,44 +35,30 @@ const Header = () => {
   };
 
   return (
-    <header className="header">
-      <NavLink className="logo-container" to={`${BASE}`}>
+    <HeaderContainer>
+      <LogoContainer to={`${BASE}`}>
         <Logo></Logo>
-      </NavLink>
-      <div className="options">
+      </LogoContainer>
+      <OptionsContainer>
         {routes.map((route) => (
-          <NavLink
-            key={route.path}
-            style={({ isActive }) =>
-              isActive ? { backgroundColor: "pink" } : {}
-            }
-            className="option"
-            to={route.path}
-          >
+          <Option key={route.path} to={route.path}>
             {route.name}
-          </NavLink>
+          </Option>
         ))}
 
         {currentUser ? (
-          <div className="option" onClick={() => signOut(auth)}>
+          <Option as="div" onClick={() => signOut(auth)}>
             SignOut
-          </div>
+          </Option>
         ) : (
-          <NavLink
-            key={signInRoute.path}
-            style={({ isActive }) =>
-              isActive ? { backgroundColor: "pink" } : {}
-            }
-            className="option"
-            to={signInRoute.path}
-          >
+          <Option key={signInRoute.path} to={signInRoute.path}>
             {signInRoute.name}
-          </NavLink>
+          </Option>
         )}
 
         <ShoppingCart />
-      </div>
-    </header>
+      </OptionsContainer>
+    </HeaderContainer>
   );
 };
 
